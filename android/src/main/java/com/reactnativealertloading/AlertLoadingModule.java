@@ -2,6 +2,7 @@ package com.reactnativealertloading;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -43,12 +44,43 @@ public class AlertLoadingModule extends ReactContextBaseJavaModule {
     return NAME;
   }
 
+  public static String asUpperCaseFirstChar(final String target) {
+    if ((target == null) || (target.length() == 0)) {
+      return target; // You could omit this check and simply live with an
+      // exception if you like
+    }
+    return Character.toUpperCase(target.charAt(0))
+      + (target.length() > 1 ? target.substring(1) : "");
+  }
+
+  private AVLoadingIndicatorView createLoadingView(String indicator, int size, ViewGroup parent) {
+    AVLoadingIndicatorView avLoadingIndicatorView = new AVLoadingIndicatorView(parent.getContext());
+    avLoadingIndicatorView.setIndicator(indicator);
+    parent.addView(avLoadingIndicatorView);
+    avLoadingIndicatorView.setLayoutParams(new FrameLayout.LayoutParams(size, size, Gravity.CENTER));
+    avLoadingIndicatorView.show();
+    return avLoadingIndicatorView;
+  }
+
+  private CircularProgressDrawable createCircleProgress(int size, ViewGroup parent) {
+    AppCompatImageView mCircleView = new AppCompatImageView(parent.getContext());
+    CircularProgressDrawable mProgress = new CircularProgressDrawable(parent.getContext());
+    mProgress.setSizeParameters(11, 2, 0, 0);
+    mProgress.setColorSchemeColors(Color.RED);
+    mProgress.start();
+    mCircleView.setImageDrawable(mProgress);
+    mCircleView.setLayoutParams(new FrameLayout.LayoutParams(size, size, Gravity.CENTER));
+    parent.addView(mCircleView);
+    return mProgress;
+  }
 
   @ReactMethod
   public void showLoading(ReadableMap params) {
     if (isPresenting) return;
     isPresenting = true;
     if (presentedDialog != null) return;
+    Activity activity = getCurrentActivity();
+    if (activity == null) return;
     System.out.println("showLoading");
 
     int size = (int) PixelUtil.toPixelFromDIP(50);
@@ -58,56 +90,30 @@ public class AlertLoadingModule extends ReactContextBaseJavaModule {
     @Nullable
     AVLoadingIndicatorView avLoadingIndicatorView = null;
 
-    FrameLayout frameLayout = new FrameLayout(getCurrentActivity());
+    FrameLayout frameLayout = new FrameLayout(activity);
     frameLayout.setLayoutParams(new ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT));
 
-    if (params.hasKey("type")) {
-      switch (params.getString("type")) {
-        case "circleStrokeSpin":
-          AppCompatImageView mCircleView = new AppCompatImageView(getCurrentActivity());
-          mProgress = new CircularProgressDrawable(getCurrentActivity());
-          mProgress.setSizeParameters(11, 2, 0, 0);
-          mProgress.setColorSchemeColors(Color.RED);
-          mProgress.start();
-          mCircleView.setImageDrawable(mProgress);
-          mCircleView.setLayoutParams(new FrameLayout.LayoutParams(size, size, Gravity.CENTER));
-          frameLayout.addView(mCircleView);
-          break;
-        case "ballClipRotate":
-          avLoadingIndicatorView = new AVLoadingIndicatorView(getCurrentActivity());
-          avLoadingIndicatorView.setIndicator("BallClipRotateIndicator");
-          frameLayout.addView(avLoadingIndicatorView);
-          avLoadingIndicatorView.setLayoutParams(new FrameLayout.LayoutParams(size, size, Gravity.CENTER));
-          avLoadingIndicatorView.show();
-          break;
-        case "ballScaleRippleMultiple":
-          avLoadingIndicatorView = new AVLoadingIndicatorView(getCurrentActivity());
-          avLoadingIndicatorView.setIndicator("BallScaleRippleMultipleIndicator");
-          frameLayout.addView(avLoadingIndicatorView);
-          avLoadingIndicatorView.setLayoutParams(new FrameLayout.LayoutParams(size, size, Gravity.CENTER));
-          avLoadingIndicatorView.show();
-          break;
-        case "ballSpinFadeLoader":
-          avLoadingIndicatorView = new AVLoadingIndicatorView(getCurrentActivity());
-          avLoadingIndicatorView.setIndicator("BallSpinFadeLoaderIndicator");
-          frameLayout.addView(avLoadingIndicatorView);
-          avLoadingIndicatorView.setLayoutParams(new FrameLayout.LayoutParams(size, size, Gravity.CENTER));
-          avLoadingIndicatorView.show();
-          break;
-      }
+    if (!params.hasKey("type")) throw new RuntimeException("Type must be present!");
+
+    String type = params.getString("type");
+    if ("circleStrokeSpin".equals(type)) {
+      mProgress = createCircleProgress(size, frameLayout);
+    } else {
+      String indicator = String.format("%sIndicator", asUpperCaseFirstChar(type));
+      avLoadingIndicatorView = createLoadingView(indicator, size, frameLayout);
     }
 
     if (params.hasKey("overlayColor")) {
-      frameLayout.setBackgroundColor(ColorPropConverter.getColor(params.getDouble("overlayColor"), getCurrentActivity()));
+      frameLayout.setBackgroundColor(ColorPropConverter.getColor(params.getDouble("overlayColor"), activity));
     }
 
     if (params.hasKey("color")) {
-      Integer color = ColorPropConverter.getColor(params.getDouble("color"), getCurrentActivity());
+      Integer color = ColorPropConverter.getColor(params.getDouble("color"), activity);
       if (mProgress != null) mProgress.setColorSchemeColors(color);
       if (avLoadingIndicatorView != null) avLoadingIndicatorView.setIndicatorColor(color);
     }
 
-    final Dialog dialog = new Dialog(getCurrentActivity());
+    final Dialog dialog = new Dialog(activity);
     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
     dialog.setContentView(frameLayout);
     final Window window = dialog.getWindow();

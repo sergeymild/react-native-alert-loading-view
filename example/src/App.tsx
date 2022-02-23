@@ -23,7 +23,7 @@ export default function App() {
           showAlertLoading({
             overlayColor: 'rgba(0, 0, 0, 0.3)',
             color: 'green',
-            type: 'ballSpinFadeLoader',
+            type: 'circleStrokeSpin',
             animate: true,
           });
         }}
