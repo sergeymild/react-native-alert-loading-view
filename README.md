@@ -5,17 +5,29 @@ Native
 ## Installation
 
 ```sh
-npm install react-native-alert-loading
+"react-native-popup-menu": "sergeymild/react-native-alert-loading-view"
+yarn
 ```
 
 ## Usage
 
 ```js
-import { multiply } from "react-native-alert-loading";
+import { showAlertLoading, hideAlertLoading } from 'react-native-alert-loading';
 
+export interface AlertLoadingShowParams {
+  readonly overlayColor?: string;
+  readonly color?: string;
+  readonly animate?: boolean;
+  readonly type: 'circleStrokeSpin' | 'ballSpinFadeLoader' | 'ballClipRotate';
+}
+
+export interface AlertLoadingHideParams {
+  readonly animate?: boolean;
+}
+
+showAlertLoading(params: AlertLoadingShowParams);
+hideAlertLoading(params?: AlertLoadingHideParams);
 // ...
-
-const result = await multiply(3, 7);
 ```
 
 ## Contributing

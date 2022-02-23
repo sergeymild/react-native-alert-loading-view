@@ -1,8 +1,8 @@
 import * as React from 'react';
 
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { showLoading, hideLoading } from 'react-native-alert-loading';
-import { useEffect, useRef, useState } from 'react';
+import { showAlertLoading, hideAlertLoading } from 'react-native-alert-loading';
+import { useEffect, useState } from 'react';
 
 export default function App() {
   const[visible, setVisible] = useState(false)
@@ -11,7 +11,7 @@ export default function App() {
     if (!visible) return
     setTimeout(() => {
       setVisible(false)
-      hideLoading({animate: true})
+      hideAlertLoading({ animate: true });
     }, 2000)
   }, [visible])
 
@@ -20,11 +20,11 @@ export default function App() {
       <TouchableOpacity
         onPress={() => {
           setVisible(true);
-          showLoading({
+          showAlertLoading({
             overlayColor: 'rgba(0, 0, 0, 0.3)',
             color: 'green',
             type: 'ballSpinFadeLoader',
-            animate: true
+            animate: true,
           });
         }}
       >

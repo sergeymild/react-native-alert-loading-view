@@ -17,14 +17,18 @@ const AlertLoading = NativeModules.AlertLoading
       }
     );
 
-interface AlertLoadingParams {
+export interface AlertLoadingShowParams {
   readonly overlayColor?: string;
   readonly color?: string;
   readonly animate?: boolean;
   readonly type: 'circleStrokeSpin' | 'ballSpinFadeLoader' | 'ballClipRotate';
 }
 
-export function showLoading(params: AlertLoadingParams) {
+export interface AlertLoadingHideParams {
+  readonly animate?: boolean;
+}
+
+export function showAlertLoading(params: AlertLoadingShowParams) {
   return AlertLoading.showLoading({
     ...params,
     overlayColor: params.overlayColor
@@ -34,6 +38,6 @@ export function showLoading(params: AlertLoadingParams) {
   });
 }
 
-export function hideLoading(params?: { animate?: boolean }) {
+export function hideAlertLoading(params?: AlertLoadingHideParams) {
   return AlertLoading.hideLoading(params);
 }
