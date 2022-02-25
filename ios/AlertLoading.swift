@@ -48,6 +48,9 @@ class AlertLoading: NSObject {
                 padding: 0
             )
             activityIndicatorView.startAnimating()
+            if type == .circleStrokeSpin {
+                (activityIndicatorView.layer.sublayers?[0] as? CAShapeLayer)?.lineWidth = 4
+            }
             activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
             containerView.addSubview(activityIndicatorView)
             
