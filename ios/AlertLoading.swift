@@ -12,7 +12,7 @@ class AlertLoading: NSObject {
         if presentedView != nil { return }
         if isPresenting { return }
         isPresenting = true
-        debugPrint("showLoading")
+        debugPrint("AlertLoading.showLoading")
         let size = CGSize(width: 42, height: 52)
         DispatchQueue.main.async { [weak self] in
             if self?.presentedView != nil { return }
@@ -73,30 +73,44 @@ class AlertLoading: NSObject {
                 }())
             
             if (params["animate"] as? Bool) == true {
-                NVActivityIndicatorView.DEFAULT_FADE_IN_ANIMATION(containerView)
+                containerView.alpha = 0
+                UIView.animate(withDuration: 0.25) {
+                    containerView.alpha = 1
+                } completion: { _ in
+                    debugPrint("AlertLoading.presented")
+                    self?.isPresenting = false
+                }
+            } else {
+                self?.isPresenting = false
+                debugPrint("AlertLoading.presented")
             }
             self?.presentedView = containerView
-            self?.isPresenting = false
         }
     }
     
     @objc
     func hideLoading(_ params: NSDictionary?) {
+        if self.presentedView == nil { return }
         if isFadingOut { return }
         isFadingOut = true
-        debugPrint("hideLoading")
+        debugPrint("AlertLoading.hideLoading")
         DispatchQueue.main.async { [weak self] in
-            guard let self = self, let view = self.presentedView else { return }
+            guard let self = self, let view = self.presentedView else {
+                self?.isFadingOut = false
+                return
+            }
             if (params?["animate"] as? Bool) == false {
                 NVActivityIndicatorView.DEFAULT_FADE_OUT_ANIMATION(view) {
                     view.removeFromSuperview()
                     self.presentedView = nil
                     self.isFadingOut = false
+                    debugPrint("AlertLoading.hidden")
                 }
             } else {
                 view.removeFromSuperview()
                 self.presentedView = nil
                 self.isFadingOut = false
+                debugPrint("AlertLoading.hidden")
             }
             
         }
