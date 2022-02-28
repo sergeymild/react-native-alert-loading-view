@@ -6,6 +6,7 @@ class AlertLoading: NSObject {
     var presentedView: UIView?
     var isFadingOut = false
     var isPresenting = false
+    var requestedHide = false
 
     @objc
     func showLoading(_ params: NSDictionary) {
@@ -82,10 +83,12 @@ class AlertLoading: NSObject {
                 } completion: { _ in
                     debugPrint("AlertLoading.presented")
                     self?.isPresenting = false
+                    if self?.requestedHide == true { self?.hideLoading([:]) }
                 }
             } else {
                 self?.isPresenting = false
                 debugPrint("AlertLoading.presented")
+                if self?.requestedHide == true { self?.hideLoading([:]) }
             }
             self?.presentedView = containerView
         }
@@ -93,7 +96,10 @@ class AlertLoading: NSObject {
     
     @objc
     func hideLoading(_ params: NSDictionary?) {
-        if self.presentedView == nil { return }
+        if self.presentedView == nil {
+            requestedHide = true
+            return
+        }
         if isFadingOut { return }
         isFadingOut = true
         debugPrint("AlertLoading.hideLoading")
