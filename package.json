@@ -1,6 +1,6 @@
 {
   "name": "react-native-alert-loading",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Native",
   "main": "src/index.tsx",
   "react-native": "src/index",
