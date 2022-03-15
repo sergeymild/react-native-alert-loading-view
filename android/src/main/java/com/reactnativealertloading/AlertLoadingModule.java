@@ -32,7 +32,6 @@ public class AlertLoadingModule extends ReactContextBaseJavaModule {
   @Nullable
   private Dialog presentedDialog;
   private boolean isPresenting = false;
-  private boolean isFading = false;
 
   public AlertLoadingModule(ReactApplicationContext reactContext) {
     super(reactContext);
@@ -126,12 +125,8 @@ public class AlertLoadingModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void hideLoading(@Nullable ReadableMap params) {
-    isPresenting = false;
-    if (isFading) return;
-    isFading = true;
     if (presentedDialog == null) return;
     presentedDialog.dismiss();
     presentedDialog = null;
-    isFading = false;
   }
 }
