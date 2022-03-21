@@ -75,9 +75,9 @@ public class AlertLoadingModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void showLoading(ReadableMap params) {
+    if (presentedDialog != null) return;
     if (isPresenting) return;
     isPresenting = true;
-    if (presentedDialog != null) return;
     Activity activity = getCurrentActivity();
     if (activity == null) return;
 
