@@ -32,7 +32,6 @@ public class AlertLoadingModule extends ReactContextBaseJavaModule {
   @Nullable
   private Dialog presentedDialog;
   private boolean isPresenting = false;
-  private boolean isFading = false;
 
   public AlertLoadingModule(ReactApplicationContext reactContext) {
     super(reactContext);
@@ -76,12 +75,11 @@ public class AlertLoadingModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void showLoading(ReadableMap params) {
+    if (presentedDialog != null) return;
     if (isPresenting) return;
     isPresenting = true;
-    if (presentedDialog != null) return;
     Activity activity = getCurrentActivity();
     if (activity == null) return;
-    System.out.println("showLoading");
 
     int size = (int) PixelUtil.toPixelFromDIP(50);
 
@@ -127,12 +125,8 @@ public class AlertLoadingModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void hideLoading(@Nullable ReadableMap params) {
-    if (isFading) return;
-    isFading = true;
     if (presentedDialog == null) return;
     presentedDialog.dismiss();
     presentedDialog = null;
-    isFading = false;
-    System.out.println("hideLoading");
   }
 }
