@@ -5,15 +5,15 @@ import { showAlertLoading, hideAlertLoading } from 'react-native-alert-loading';
 import { useEffect, useState } from 'react';
 
 export default function App() {
-  const[visible, setVisible] = useState(false)
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    if (!visible) return
+    if (!visible) return;
+    setVisible(false);
     setTimeout(() => {
-      setVisible(false)
       hideAlertLoading({ animate: true });
-    }, 2000)
-  }, [visible])
+    }, 100);
+  }, [visible]);
 
   return (
     <View style={styles.container}>
