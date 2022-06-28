@@ -12,7 +12,7 @@ export default function App() {
     setVisible(false);
     setTimeout(() => {
       hideAlertLoading({ animate: true });
-    }, 100);
+    }, 3000);
   }, [visible]);
 
   return (
@@ -23,7 +23,7 @@ export default function App() {
           showAlertLoading({
             overlayColor: 'rgba(0, 0, 0, 0.3)',
             color: 'green',
-            type: 'circleStrokeSpin',
+            type: 'ballSpinFadeLoader',
             animate: true,
           });
         }}

@@ -23,7 +23,6 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.module.annotations.ReactModule;
 import com.facebook.react.uimanager.PixelUtil;
-import com.wang.avi.AVLoadingIndicatorView;
 
 @ReactModule(name = AlertLoadingModule.NAME)
 public class AlertLoadingModule extends ReactContextBaseJavaModule {
