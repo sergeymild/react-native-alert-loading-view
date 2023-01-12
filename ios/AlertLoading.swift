@@ -2,11 +2,15 @@ import NVActivityIndicatorView
 
 
 @objc(AlertLoading)
-class AlertLoading: NSObject {
+class AlertLoading: RCTViewManager {
     var presentedView: UIView?
     var isFadingOut = false
     var isPresenting = false
-    var requestedHide = false
+    var requestedHide = 
+    
+    override class func requiresMainQueueSetup() -> Bool {
+        return true
+    }
 
     @objc
     func showLoading(_ params: NSDictionary) {
