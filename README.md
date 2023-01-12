@@ -5,7 +5,7 @@ Native
 ## Installation
 
 ```sh
-"react-native-alert-loading": "sergeymild/react-native-alert-loading-view#0.2.5"
+"react-native-alert-loading": "sergeymild/react-native-alert-loading-view#0.2.6"
 yarn
 ```
 
