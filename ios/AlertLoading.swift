@@ -6,7 +6,7 @@ class AlertLoading: RCTViewManager {
     var presentedView: UIView?
     var isFadingOut = false
     var isPresenting = false
-    var requestedHide = 
+    var requestedHide = false
     
     override class func requiresMainQueueSetup() -> Bool {
         return true
